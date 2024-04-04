@@ -1,7 +1,9 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 import random
 import string
+import ttkthemes
+import pyperclip  # Importando pyperclip para manipulação da área de transferência
 
 def generate_password(length=12):
     characters = string.ascii_letters + string.digits + string.punctuation
@@ -24,24 +26,35 @@ def generate_and_show_password():
     password_display.insert(tk.END, password)
     password_display.config(state="disabled")
 
+def copy_to_clipboard():
+    password = password_display.get("1.0", "end-1c")  # Obtém a senha da área de texto
+    pyperclip.copy(password)  # Copia a senha para a área de transferência
+
 # Configuração da janela
 root = tk.Tk()
 root.title("Gerador de Senhas")
-root.geometry("400x200")
+root.geometry("400x250")
 root.resizable(False, False)
 
+# Aplicando o tema do ttkthemes
+style = ttkthemes.ThemedStyle(root)
+style.set_theme("arc")
+
 # Criando os widgets
-length_label = tk.Label(root, text="Comprimento da Senha:")
+length_label = ttk.Label(root, text="Comprimento da Senha:")
 length_label.pack(pady=(10, 0))
 
-length_entry = tk.Entry(root, width=10)
+length_entry = ttk.Entry(root, width=10)
 length_entry.pack()
 
-generate_button = tk.Button(root, text="Gerar Senha", command=generate_and_show_password)
+generate_button = ttk.Button(root, text="Gerar Senha", command=generate_and_show_password)
 generate_button.pack(pady=(10, 0))
 
 password_display = tk.Text(root, height=1, width=30, state="disabled")
 password_display.pack(pady=(10, 0))
+
+copy_button = ttk.Button(root, text="Copiar Senha", command=copy_to_clipboard)
+copy_button.pack(pady=(5, 10))
 
 # Execução da aplicação
 root.mainloop()
