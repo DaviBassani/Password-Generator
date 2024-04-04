@@ -1,5 +1,6 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
+import customtkinter as tk
+from customtkinter import ctk_tk as ttk
+from customtkinter import CTkTextbox as messagebox
 import random
 import string
 import ttkthemes
@@ -24,10 +25,10 @@ def generate_and_show_password():
         return
     
     password = generate_password(length)
-    password_display.config(state="normal")
+    password_display.configure(state="normal")
     password_display.delete("1.0", tk.END)
     password_display.insert(tk.END, password)
-    password_display.config(state="disabled")
+    password_display.configure(state="disabled")
     
     # Adiciona a senha ao histórico com base no número de vezes que o botão foi pressionado
     password_history.append(password)
@@ -38,14 +39,14 @@ def copy_to_clipboard():
     pyperclip.copy(password)
 
 def update_password_history():
-    history_text.config(state="normal")
+    history_text.configure(state="normal")
     history_text.delete("1.0", tk.END)
     for i, password in enumerate(reversed(password_history), 1):
         history_text.insert(tk.END, f"Senha {len(password_history) - i + 1}: {password}\n")
-    history_text.config(state="disabled")
+    history_text.configure(state="disabled")
 
 # Configuração da janela
-root = tk.Tk()
+root = tk.CTk()
 root.title("Gerador de Senhas")
 root.geometry("400x300")
 root.resizable(False, False)
@@ -55,26 +56,27 @@ style = ttkthemes.ThemedStyle(root)
 style.set_theme("arc")
 
 # Criando os widgets
-length_label = ttk.Label(root, text="Comprimento da Senha:")
+length_label = tk.CTkLabel(root, text="Comprimento da Senha:")
 length_label.pack(pady=(10, 0))
 
-length_entry = ttk.Entry(root, width=10)
+length_entry = tk.CTkEntry(root, width=10)
 length_entry.pack()
 
-generate_button = ttk.Button(root, text="Gerar Senha", command=generate_and_show_password)
+generate_button = tk.CTkButton(root, text="Gerar Senha", command=generate_and_show_password)
 generate_button.pack(pady=(10, 0))
 
-password_display = tk.Text(root, height=1, width=30, state="disabled")
+password_display = tk.CTkTextbox(root, height=50, width=100, state="disabled")
 password_display.pack(pady=(10, 0))
 
-copy_button = ttk.Button(root, text="Copiar Senha", command=copy_to_clipboard)
+copy_button = tk.CTkButton(root, text="Copiar Senha", command=copy_to_clipboard)
 copy_button.pack(pady=(5, 10))
 
 # Widget para exibir o histórico de senhas
-history_label = ttk.Label(root, text="Histórico de Senhas:")
+history_label = tk.CTkLabel(root, text="Histórico de Senhas:")
 history_label.pack()
 
-history_text = tk.Text(root, height=3, width=30, state="disabled")
+# Increase height of history_text to 5
+history_text = tk.CTkTextbox(root, height=100, width=300, state="disabled")
 history_text.pack()
 
 # Execução da aplicação
