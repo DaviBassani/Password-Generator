@@ -1,6 +1,6 @@
 import customtkinter as tk
 from customtkinter import ctk_tk as ttk
-from customtkinter import CTkTextbox as messagebox
+from customtkinter import CTkToplevel as messagebox
 import random
 import string
 import ttkthemes
@@ -18,10 +18,22 @@ def generate_and_show_password():
     try:
         length = int(length_entry.get())
         if length <= 0:
-            messagebox.showerror("Erro", "O comprimento da senha deve ser um número positivo.")
+            message_box = messagebox(root)
+            message_box.title("Erro")
+            message_box.geometry("300x100")
+            message_box.configure(fg_color="white", bg_color="red")
+            
+            label = tk.CTkLabel(message_box, text="O comprimento da senha deve ser um número positivo.")
+            label.pack(padx=20, pady=20)
             return
     except ValueError:
-        messagebox.showerror("Erro", "Por favor, insira um número inteiro válido para o comprimento da senha.")
+        message_box = messagebox(root)
+        message_box.title("Erro")
+        message_box.geometry("300x100")
+        message_box.configure(fg_color="white", bg_color="red")
+        
+        label = tk.CTkLabel(message_box, text="Por favor, insira um número inteiro válido para o comprimento da senha.")
+        label.pack(padx=20, pady=20)
         return
     
     password = generate_password(length)
@@ -45,6 +57,15 @@ def update_password_history():
         history_text.insert(tk.END, f"Senha {len(password_history) - i + 1}: {password}\n")
     history_text.configure(state="disabled")
 
+def show_message_box():
+    message_box = messagebox(root)
+    message_box.title("Exemplo de MessageBox")
+    message_box.geometry("300x150")
+    message_box.configure(fg_color="white", bg_color="blue")
+    
+    label = tk.CTkLabel(message_box, text="Isso é uma MessageBox customizada!")
+    label.pack(padx=20, pady=20)
+
 # Configuração da janela
 root = tk.CTk()
 root.title("Gerador de Senhas")
@@ -59,7 +80,7 @@ style.set_theme("arc")
 length_label = tk.CTkLabel(root, text="Comprimento da Senha:")
 length_label.pack(pady=(10, 0))
 
-length_entry = tk.CTkEntry(root, width=10)
+length_entry = tk.CTkEntry(root, width=50)
 length_entry.pack()
 
 generate_button = tk.CTkButton(root, text="Gerar Senha", command=generate_and_show_password)
@@ -71,13 +92,19 @@ password_display.pack(pady=(10, 0))
 copy_button = tk.CTkButton(root, text="Copiar Senha", command=copy_to_clipboard)
 copy_button.pack(pady=(5, 10))
 
-# Widget para exibir o histórico de senhas
 history_label = tk.CTkLabel(root, text="Histórico de Senhas:")
 history_label.pack()
 
-# Increase height of history_text to 5
 history_text = tk.CTkTextbox(root, height=100, width=300, state="disabled")
 history_text.pack()
+
+root.minsize(200, 400)
+
+# Botão para mostrar a MessageBox customizada
+# message_box_button = tk.CTkButton(root, text="Mostrar MessageBox", command=show_message_box)
+# message_box_button.pack(pady=(5, 10))
+
+root.resizable(True, True)
 
 # Execução da aplicação
 root.mainloop()
